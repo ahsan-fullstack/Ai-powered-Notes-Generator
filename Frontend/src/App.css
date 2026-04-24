@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0f0c0c;
+  --surface: #1a1414;
+  --surface2: #221818;
+  --border: #2e2222;
+  --gold: #c94c4c;
+  --gold-dim: #7a3030;
+  --amber: #e84b4b;
+  --text: #e8d6d6;
+  --text-muted: #7d6868;
+  --text-dim: #4a4040;
+  --green: #5a9e6f;
+  --red: #c05a5a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'serif';
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #c9a84c;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.loader::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid;
+  border-color: #7d7565 transparent;
+}
+
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 28px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  background: var(--surface2);
+  color: var(--gold);
+  border: 1px solid var(--border);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
