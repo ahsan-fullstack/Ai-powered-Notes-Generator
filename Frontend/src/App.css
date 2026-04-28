@@ -2,12 +2,12 @@
 
 :root {
   --bg: #0f0c0c;
-  --surface: #1a1414;
+  --surface: #1a1814;
   --surface2: #221818;
-  --border: #2e2222;
-  --gold: #c94c4c;
-  --gold-dim: #7a3030;
-  --amber: #e84b4b;
+  --border: #2e2a22;
+  --gold: #c9a84c;
+  --gold-dim: #7a6330;
+  --amber: #e8b84b;
   --text: #e8d6d6;
   --text-muted: #7d6868;
   --text-dim: #4a4040;
@@ -94,6 +94,197 @@ body {
   border: 1px solid var(--border);
 }
 
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  animation: fadeIn 0.4s ease;
+  text-align: start;
+}
+
+
+.panel-label {
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.summary-text {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.summary-text h2,
+.summary-text h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--text);
+  margin: 20px 0 10px;
+  font-size: 17px;
+}
+
+.summary-text ul,
+.summary-text ol {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.summary-text li {
+  margin-bottom: 6px;
+}
+
+.summary-text strong {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+/* Flashcards */
+.flashcards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.flashcard {
+  height: 180px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flashcard-front {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.flashcard-back {
+  background: #1a1814;
+  border: 1px solid var(--gold-dim);
+  transform: rotateY(180deg);
+}
+
+.card-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.flashcard-back .card-label {
+  color: var(--gold-dim);
+}
+
+.card-text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.flashcard-back .card-text {
+  color: var(--amber);
+}
+
+.flip-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 12px;
+  text-align: right;
+}
+
+.cards-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+/* Notes */
+.notes-text {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--text);
+  font-weight: 300;
+}
+
+.notes-text h1,
+.notes-text h2,
+.notes-text h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--amber);
+  margin: 24px 0 10px;
+}
+
+.notes-text h1 {
+  font-size: 22px;
+}
+
+.notes-text h2 {
+  font-size: 18px;
+}
+
+.notes-text h3 {
+  font-size: 16px;
+  color: var(--gold);
+}
+
+.notes-text ul,
+.notes-text ol {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.notes-text li {
+  margin-bottom: 8px;
+}
+
+.notes-text p {
+  margin-bottom: 12px;
+}
+
+.notes-text strong {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.notes-text code {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--gold);
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -101,5 +292,17 @@ body {
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

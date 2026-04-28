@@ -1,26 +1,28 @@
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'
-import ChatBox from './component/Chat'
+import Home from './component/Home'
 import Login from './auth/Login'
 import SignUp from './auth/SignUp'
 import { useEffect } from 'react'
+import { Chat } from './component/Chat'
 
 function App() {
   const navigate = useNavigate();
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login')
     }
-  }, [])
+  }, [navigate])
   return (
     <>
-      <ChatBox />
-      {/* <Routes>
+      <Routes>
+        <Route path='/' element={<Home />}></Route>
+        <Route path='/c/:id' element={<Chat />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
-        <Route path='/' element={<ChatBox />}></Route>
-      </Routes> */}
+      </Routes>
     </>
   )
 }

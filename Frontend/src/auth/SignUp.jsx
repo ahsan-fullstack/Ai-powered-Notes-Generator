@@ -1,5 +1,5 @@
 // SignUp.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
@@ -23,8 +23,8 @@ const SignUp = () => {
 
   const handleSumbit = async (e) => {
     e.preventDefault()
-    const error = handleError();
-    SetError(error);
+    const validationErrors = handleError();
+    SetError(validationErrors);
 
     setSubmitting(true)
 
@@ -42,7 +42,7 @@ const SignUp = () => {
       setSubmitting(false)
       const res = await result.json();
       console.log(res, ' res ')
-    } catch (error) {
+    } catch {
       setSubmitting(false)
     }
   }

@@ -34,16 +34,14 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          form
-        })
+        body:JSON.stringify(form) 
       })
       setSubmitting(false)
       const res = await result.json();
       console.log(res)
-      SetToLocal(res.data.token);
+      SetToLocal(res.token);
       navigate('/')
-    } catch (error) {
+    } catch {
       setSubmitting(false)
     }
 

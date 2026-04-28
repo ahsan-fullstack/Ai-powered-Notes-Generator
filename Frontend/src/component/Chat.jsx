@@ -1,86 +1,120 @@
-import { useRef, useState } from "react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUp, faPlus, faXmark, faRobot, faFile, faFilePdf } from "@fortawesome/free-solid-svg-icons"
-import { Navbar } from './navbar'
-import { FilePreview } from "./FilePreview"
-import { UploadBox } from "./Upload"
-
-function ChatBox() {
-  const [imageUrl, setImageUrl] = useState(null)
-  const [file, setFile] = useState("")
-  const [message, setMessage] = useState("")
+import { useMemo, useState } from "react";
+import { marked } from "marked";
+import { useLocation, useParams } from "react-router-dom";
 
 
-  const handleChanges = async (file, baseUrl) => {
-    setFile(file);
-    setImageUrl(baseUrl);
-  }
-  const handleRemoveFile = () => {
-    setFile("");
+export const Chat = () => {
+  const { id: chatId } = useParams();
+  const { state } = useLocation();
+  const results = state?.results;
 
+  const [tab, setTab] = useState("summary");
+  const [flipped, setFlipped] = useState({});
 
-    setImageUrl(null);
-  }
-
-  const submitData = async (formData) => {
-
+  const summary = results?.summary?.kwargs?.content || "";
+  const notes = results?.notes?.kwargs?.content || "";
+  const flashcards = useMemo(() => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_KEY}/chat`, {
-        method: 'POST',
-        body: formData,
-      })
-
-      const result = await response.json()
-      console.log(result, 'result  ')
-      return result;
-    } catch (error) {
-      console.log('Submission Failed', error)
+      const parsed = JSON.parse(results?.flashcards?.kwargs?.content || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
     }
+  }, [results]);
+
+  const tabs = [
+    { id: "summary", label: "Summary", icon: "◈" },
+    { id: "flashcards", label: `Flashcards (${flashcards.length})`, icon: "⟁" },
+    { id: "notes", label: "Notes", icon: "≡" },
+  ]
+
+  function toggleFlip(i) {
+    setFlipped((p) => ({ ...p, [i]: !p[i] }))
   }
 
+  const parseMarkdown = (text) => marked(text);
+  
   return (
     <>
-      <Navbar />
-      <div className="flex items-center font-serif relative text-center">
-        <div className="chat-container flex items-center justify-center w-full ">
-          <div className="w-[90%] h-[100vh]">
-
-            <div className="flex items-center flex-col justify-center h-full gap-[20px] p-4
-            rounded-lg">
-
-              <div className="flex items-center gap-3">
-                <div className="inner-wrapper pb-[30px]
-                flex flex-col items-center 
-                justify-center h-full gap-3 
-                text-center">
-                  <h1 className="text-[3rem] font-bold leading-[0.9] pb-[1rem]">
-                    Transform your PDFs into
-                    <br></br>
-                    <em className="text-[2rem] text-[#c9a84c] italic font-bold">
-                      Study-ready materials
-                    </em>
-                  </h1>
-                  <p className='max-w-[70%] pb-[4rem] font-sans text-[#7d7568] tracking-wider'>Upload any PDF and instantly get a summary, flashcards, and structured notes.</p>
-                </div>
-              </div>
-
-
-              {file ? (
-                <>
-                  <FilePreview file={file}
-                    onRemoveFile={handleRemoveFile}
-                    onSubmit={submitData} />
-                </>
-              ) : (
-                <UploadBox onFileSelect={handleChanges} />
-              )}
-            </div>
-
+      {!results ? (
+        <div className="w-full p-6 text-[var(--text)]">
+          <div className="font-serif text-[22px] mb-2">Chat: {chatId}</div>
+          <div className="text-[#7d7568]">
+            No generated content found for this chat yet. Upload a PDF to generate summary, flashcards, and notes.
           </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="results-header flex items-center justify-between w-full mb-3! font-serif">
+            <div className="results-title text-[25px]">Your Study Materials</div>
+            <button
+              className="new-btn border-[1px] 
+            border-[#7d7568] cursor-pointer py-2 px-4 
+            text-[#7d7568] text-[14px]"
+            >
+              + New PDF
+            </button>
+          </div>
+
+          <div className="tabs w-full">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                className={`tab ${tab === t.id ? "active" : ""}`}
+                onClick={() => setTab(t.id)}
+              >
+                {t.icon} {t.label}
+              </button>
+            ))}
+          </div>
+          {tab === "summary" && (
+            <div className="panel">
+              <div className="panel-label">✦ AI Summary</div>
+              <div
+                className="summary-text"
+                dangerouslySetInnerHTML={{ __html: parseMarkdown(summary) }}
+              />
+            </div>
+          )}
+          {tab === "flashcards" && (
+            <div className="panel w-full">
+              <div className="panel-label">⟁ Flashcards — Click to flip</div>
+              <div className="cards-count">{flashcards.length} cards generated</div>
+              <div className="flashcards-grid">
+                {flashcards.map((card, i) => (
+                  <div
+                    key={i}
+                    className={`flashcard ${flipped[i] ? "flipped" : ""}`}
+                    onClick={() => toggleFlip(i)}
+                  >
+                    <div className="flashcard-inner">
+                      <div className="flashcard-face flashcard-front">
+                        <div className="card-label">Question {i + 1}</div>
+                        <div className="card-text">{card.question}</div>
+                        <div className="flip-hint">tap to reveal →</div>
+                      </div>
+                      <div className="flashcard-face flashcard-back">
+                        <div className="card-label">Answer</div>
+                        <div className="card-text">{card.answer}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {tab === "notes" && (
+            <div className="panel">
+              <div className="panel-label">Study Notes</div>
+              <div
+                className="notes-text"
+                dangerouslySetInnerHTML={{ __html: parseMarkdown(notes) }}
+              />
+            </div>
+          )}
+        </>
+      )}
     </>
   )
 }
-
-export default ChatBox

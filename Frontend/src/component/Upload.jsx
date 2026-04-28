@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons"
 import { FileUpload } from "../utils/FileUpload"
 
@@ -16,7 +17,7 @@ export const UploadBox = ({ onFileSelect }) => {
   }
   return (
     <>
-      <div className="main-wrapper absolute bottom-[5%] h-[37%]
+      <div className="main-wrapper relative py-[20px]
             flex flex-col items-center justify-center gap-2 bg-[#1a1814] border-[2px]
             border-[#1a1814] w-[70%] rounded-lg cursor-pointer
             transition-all duration-500 ease-in-out
@@ -26,7 +27,7 @@ export const UploadBox = ({ onFileSelect }) => {
           type="file"
           accept="application/pdf"
           onChange={handleChanges}
-          className="opacity-0 inset-0 h-full w-full absolute cursor-pointer"
+          className="opacity-0 inset-0 absolute cursor-pointer"
         />
 
         <div className="upload-area flex flex-col items-center justify-center gap-2 text-center">
