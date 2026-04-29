@@ -7,19 +7,21 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 export class chatService {
 
-  static async createChat({userId,chatId}) {
+  static async GetOrCreateChat({ userId, chatId, fileName }) {
     let chat;
-    if(!chatId){
-      chat = await Chat.create({ userId, isActive: true });
+    if (!chatId) {
+      chat = await Chat.create({ userId, isActive: true, title: fileName });
       console.log(chat, 'created chat')
       return chat._id;
-      
-    }else{
-      chat = await Chat.findByIdAndUpdate(chatId, { isActive: true }, { new: true });
+
+    } else {
+      chat = await Chat.findByIdAndUpdate({ _id: chatId, userId },
+        { isActive: true },
+        { new: true });
       console.log(chat, 'updated chat')
     }
     return chat._id;
-   }
+  }
 
   static async GenerateContent(filePath) {
     console.log("Chat service called with file path:", filePath);
@@ -47,5 +49,7 @@ export class chatService {
 
     return { summary, flashcards, notes };
   }
-
+  static async GetChats(userId) {
+    return Chat.find({ userId }, { title: 1 ,_id:0})
+  }
 }

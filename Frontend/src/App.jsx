@@ -5,10 +5,12 @@ import Login from './auth/Login'
 import SignUp from './auth/SignUp'
 import { useEffect } from 'react'
 import { Chat } from './component/Chat'
+import { Navbar } from './component/Navbar'
+import { LayOut } from './component/Layout'
 
 function App() {
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -18,8 +20,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='/c/:id' element={<Chat />}></Route>
+        <Route element={<LayOut />}>
+          <Route path='/' element={<Home />}></Route>
+          <Route path='/c/:id' element={<Chat />}></Route>
+        </Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
       </Routes>

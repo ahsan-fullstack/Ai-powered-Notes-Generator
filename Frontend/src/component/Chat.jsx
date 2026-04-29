@@ -1,26 +1,24 @@
-import { useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { marked } from "marked";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { FlashCard } from "./FlashCard";
+import { SideBar } from "./SideBar";
 
 
-export const Chat = () => {
-  const { id: chatId } = useParams();
+export const Chat = memo(() => {
+  const navigate = useNavigate()
+
+  const { id } = useParams();
   const { state } = useLocation();
-  const results = state?.results;
+  const results = state?.results.results;
+  console.log(results, ' results in chat component')
 
   const [tab, setTab] = useState("summary");
   const [flipped, setFlipped] = useState({});
 
   const summary = results?.summary?.kwargs?.content || "";
+  const flashcards = JSON.parse(results?.flashcards?.kwargs?.content || "[]");
   const notes = results?.notes?.kwargs?.content || "";
-  const flashcards = useMemo(() => {
-    try {
-      const parsed = JSON.parse(results?.flashcards?.kwargs?.content || "[]");
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }, [results]);
 
   const tabs = [
     { id: "summary", label: "Summary", icon: "◈" },
@@ -33,9 +31,10 @@ export const Chat = () => {
   }
 
   const parseMarkdown = (text) => marked(text);
-  
+
   return (
     <>
+      <div className="w-full py-[30px] px-[20px]">
       {!results ? (
         <div className="w-full p-6 text-[var(--text)]">
           <div className="font-serif text-[22px] mb-2">Chat: {chatId}</div>
@@ -51,6 +50,7 @@ export const Chat = () => {
               className="new-btn border-[1px] 
             border-[#7d7568] cursor-pointer py-2 px-4 
             text-[#7d7568] text-[14px]"
+            onClick={()=> navigate('/')}
             >
               + New PDF
             </button>
@@ -80,25 +80,17 @@ export const Chat = () => {
             <div className="panel w-full">
               <div className="panel-label">⟁ Flashcards — Click to flip</div>
               <div className="cards-count">{flashcards.length} cards generated</div>
+
               <div className="flashcards-grid">
                 {flashcards.map((card, i) => (
-                  <div
+                  <FlashCard
                     key={i}
-                    className={`flashcard ${flipped[i] ? "flipped" : ""}`}
-                    onClick={() => toggleFlip(i)}
-                  >
-                    <div className="flashcard-inner">
-                      <div className="flashcard-face flashcard-front">
-                        <div className="card-label">Question {i + 1}</div>
-                        <div className="card-text">{card.question}</div>
-                        <div className="flip-hint">tap to reveal →</div>
-                      </div>
-                      <div className="flashcard-face flashcard-back">
-                        <div className="card-label">Answer</div>
-                        <div className="card-text">{card.answer}</div>
-                      </div>
-                    </div>
-                  </div>
+                    card={card}
+                    index={i}
+                    flipped={flipped[i]}
+                    onFlip={() => toggleFlip(i)}
+                    flashcards={flashcards}
+                  />
                 ))}
               </div>
             </div>
@@ -115,6 +107,7 @@ export const Chat = () => {
           )}
         </>
       )}
+      </div>
     </>
   )
-}
+})

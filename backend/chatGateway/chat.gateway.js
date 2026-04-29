@@ -24,7 +24,6 @@ export const ChatGateWay = (httpserver) => {
       socket.disconnect();
       return;
     }
-    // Socket connection should not create chats. Chat creation is explicit via HTTP.
     socket.emit('connectedUser', { userId: user_id });
   })
 }

@@ -7,6 +7,7 @@ import http from 'http'
 import { ChatGateWay } from './chatGateway/chat.gateway.js';
 import authRoute from './api/routes/auth.route.js';
 import { connectDB } from './utils/connectionDB.js';
+import { authMiddleware } from './api/middlware/auth.middleware.js';
 
 dotenv.config();
 await connectDB();
@@ -21,11 +22,10 @@ app.use(cors({
     origin: '*'
 }));
 
-app.use('/chat', chatRoute)
+app.use('/chat', authMiddleware,chatRoute)
 app.use('/auth', authRoute)
 
-ChatGateWay(server);
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
