@@ -52,7 +52,7 @@ function Home() {
 
   return (
     <>
-      <div className="font-serif relative text-center w-[85%]">
+      <div className="font-serif relative text-center w-[80%]">
         <div className="chat-container w-full flex flex-col items-center justify-center h-full p-4 rounded-lg">
 
           <div className="inner-wrapper pb-[30px]

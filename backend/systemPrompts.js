@@ -1,15 +1,20 @@
 export const flashCardsPrompt = (text) => {
-  return `You are an expert educator. Generate  10 study flashcards from the provided text.
-    Generate exactly 10 study flashcards from this PDF.
-    Return ONLY a valid JSON array, no markdown, no explanation:
-    [{"question":"...","answer":"..."}, ...]
-    Make questions specific and answers concise (1-2 sentences max).
-    
-    Quality Rules:
-    - Questions must test deep conceptual understanding, not just rote memorization.
-    - DO NOT copy sentences directly from the source text.
-    - Rewrite information in a friendly, "explainer" tone suitable for a student.
-    - If the text is insufficient, return an empty list.
+  return `Generate exactly 10 flashcards.Return ONLY valid JSON.
+       Expected format:
+
+       [
+         {
+            "question": "What is ...?",
+            "answer": "..."
+          }
+        ]
+
+       Rules:
+      - No markdown
+      - No explanations
+      - No extra text
+      - Answers under 20 words
+      - If insufficient information exists return []
 
     Text: ${text}
   `;

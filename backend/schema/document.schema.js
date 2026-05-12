@@ -1,4 +1,6 @@
-const DocumentScheam = new Schema({
+import mongoose, { Schema, Types } from "mongoose"
+
+const DocumentSchema = new Schema({
   userId: {
     type: Types.ObjectId,
     ref: 'User'
@@ -14,8 +16,26 @@ const DocumentScheam = new Schema({
   fileSize: {
     type: Number,
   },
-  extractedText: {
+  summary: {
     type: String,
-    required: [true, 'ExtractedText is required'],
-  }
+  },
+
+  flashcards: {
+    type: [{
+      question: {
+        type: String,
+        required: true
+      },
+      answer: {
+        type: String,
+        required: true
+      }
+    }],
+  },
+
+  notes: {
+    type: String,
+  },
 }, { timestamps: true })
+
+export const Document = mongoose.model('Document', DocumentSchema)

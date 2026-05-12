@@ -34,7 +34,7 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body:JSON.stringify(form) 
+        body: JSON.stringify(form)
       })
       setSubmitting(false)
       const res = await result.json();
@@ -48,73 +48,85 @@ const Login = () => {
   }
 
   return (
-    <div className="login-main h-[100vh]">
-      <div className="login-main-wrapper my-8 h-[557.66px] flex flex-col items-center">
-        <h1 className="text-center text-[25px] font-bold tracking-wide mb-4">
+    <div className="login-main h-[100vh] flex items-center justify-center bg-[var(--bg)]">
+      <div className="login-main-wrapper my-8">
+
+        <h1 className="text-center text-[26px] font-bold tracking-wide mb-5 text-[var(--gold)]">
           Closer to be the Toper
         </h1>
 
         <form
-          className="flex flex-col justify-center gap-4 m-2 py-4 px-3 bg-[#fff] border border-gray-300 shadow-xl w-[30rem] h-[20rem]"
+          className="flex flex-col justify-center gap-4 m-2 py-6 px-5 
+      bg-[var(--surface)] border border-[var(--border)] 
+      rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] w-[30rem] h-[20rem]"
         >
-          {/* Email field */}
+
+          {/* Email */}
           <div className="flex flex-col gap-1 relative">
             <input
               type="email"
-              id="email"
               name="email"
-              className={`peer border border-gray-300 px-2 py-2 rounded outline-none`}
               placeholder="Email"
               onChange={handleChange}
+              className="border border-[var(--border)] bg-[var(--surface2)] 
+          text-[var(--text)] px-3 py-2 rounded-lg outline-none 
+          focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold-dim)] 
+          placeholder:text-[var(--text-dim)]"
             />
-            <h1 className="text-[12px] text-[red]">{error.email}</h1>
+            <h1 className="text-[12px] text-[var(--red)]">{error.email}</h1>
           </div>
 
-          {/* Password field */}
+          {/* Password */}
           <div className="flex flex-col gap-1 relative">
             <input
-              placeholder="Password"
               type="password"
               name="password"
-              className={`peer border border-gray-300 px-2 py-2 rounded outline-none`}
+              placeholder="Password"
               autoComplete="on"
               onChange={handleChange}
+              className="border border-[var(--border)] bg-[var(--surface2)] 
+          text-[var(--text)] px-3 py-2 rounded-lg outline-none 
+          focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold-dim)] 
+          placeholder:text-[var(--text-dim)]"
             />
-            <h1 className="text-[12px] text-[red]">{error.password}</h1>
+            <h1 className="text-[12px] text-[var(--red)]">{error.password}</h1>
           </div>
 
           <div>
             <button
               type="button"
-              className="cursor-pointer text-blue-600 text-sm hover:underline"
-
+              className="cursor-pointer text-[var(--amber)] text-sm hover:underline"
             >
               Forgot Password ?
             </button>
           </div>
 
-          {/* Login button (replace with your <app-button> equivalent) */}
+          {/* Button */}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-blue-600 text-white rounded py-2 font-semibold hover:bg-blue-700 transition disabled:opacity-60"
             onClick={handleSumbit}
+            className="w-full 
+        bg-[var(--gold)] text-[var(--bg)] 
+        rounded-lg py-2 font-semibold cursor-pointer
+        hover:bg-[var(--amber)] transition 
+        disabled:opacity-60"
           >
             {submitting ? 'Login...' : 'Login'}
           </button>
 
-          <div className="flex justify-end text-sm">
+          <div className="flex justify-end text-sm text-[var(--text-muted)]">
             <span>
               Don't have an account?{" "}
-              {/* If you use react-router */}
               <Link
-                to="/SignUp"
-                className="text-blue-600 hover:underline cursor-pointer"
+                to="/signup"
+                className="text-[var(--gold)] hover:text-[var(--amber)] hover:underline cursor-pointer"
               >
                 SignUp
               </Link>
             </span>
           </div>
+
         </form>
       </div>
     </div>
